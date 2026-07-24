@@ -30,13 +30,15 @@ jobs:
           chmod 600 ~/.ssh/id_rsa
           ssh-keyscan -H ${{ secrets.EC2_HOST }} >> ~/.ssh/known_hosts
 
-      - name: Copy JAR to EC2
+      - name: Copy WAR to EC2
         run: |
-          scp target/*.jar ec2-user@${{ secrets.EC2_HOST }}:/home/ec2-user/app.jar
+          scp target/*.war ec2-user@${{ secrets.EC2_HOST }}:/tmp/
 
-      - name: Restart Application
+      - name: Deploy WAR to Tomcat
         run: |
           ssh ec2-user@${{ secrets.EC2_HOST }} << 'EOF'
-            pkill -f app.jar || true
-            nohup java -jar /home/ec2-user/app.jar > app.log 2>&1 &
+            sudo mv /tmp/*.war /opt/tomcat/webapps/ROOT.war
+            sudo chown tomcat:tomcat /opt/tomcat/webapps/ROOT.war
+            sudo systemctl restart tomcat
+            sudo systemctl status tomcat --no-pager
           EOF
