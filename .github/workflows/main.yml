@@ -51,6 +51,7 @@ jobs:
             -Dsonar.projectKey=Stateful-Tracker \
             -Dsonar.projectName=Stateful-Tracker
 
+      
       - name: Configure SSH
         run: |
           mkdir -p ~/.ssh
