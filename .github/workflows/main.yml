@@ -20,8 +20,31 @@ jobs:
           java-version: '21'
           cache: maven
 
-      - name: Build with Maven
-        run: mvn clean package -DskipTests
+      - name: Create Maven settings.xml
+        run: |
+          mkdir -p ~/.m2
+          cat > ~/.m2/settings.xml <<EOF
+          <settings>
+            <servers>
+              <server>
+                <id>github-maven</id>
+                <username>${{ secrets.NEXUS_USERNAME }}</username>
+                <password>${{ secrets.NEXUS_PASSWORD }}</password>
+              </server>
+            </servers>
+          </settings>
+          EOF
+
+      - name: Build and Upload to Nexus
+        run: mvn clean deploy -DskipTests
+
+      - name: SonarQube Analysis
+        run: |
+          mvn sonar:sonar \
+            -Dsonar.host.url=${{ secrets.SONAR_HOST_URL }} \
+            -Dsonar.token=${{ secrets.SONAR_TOKEN }} \
+            -Dsonar.projectKey=Stateful-Tracker \
+            -Dsonar.projectName=Stateful-Tracker
 
       - name: Configure SSH
         run: |
@@ -40,5 +63,4 @@ jobs:
             sudo mv /tmp/*.war /opt/tomcat/webapps/ROOT.war
             sudo chown tomcat:tomcat /opt/tomcat/webapps/ROOT.war
             sudo systemctl restart tomcat
-            sudo systemctl status tomcat --no-pager
           EOF
