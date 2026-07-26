@@ -34,7 +34,10 @@ jobs:
             </servers>
           </settings>
           EOF
-
+      - name: Verify Maven settings
+        run: |
+          echo "===== settings.xml ====="
+          cat ~/.m2/settings.xml
       - name: Build and Upload to Nexus
         run: mvn clean deploy -DskipTests
 
