@@ -40,7 +40,9 @@ jobs:
           cat ~/.m2/settings.xml
       - name: Build and Upload to Nexus
         run: mvn clean deploy -DskipTests
-
+      - name: Test SonarQube Connectivity
+        run: |
+          curl -I ${{ secrets.SONAR_HOST_URL }}
       - name: SonarQube Analysis
         run: |
           mvn sonar:sonar \
