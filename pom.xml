@@ -7,6 +7,9 @@
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+            <sonar.host.url>http://65.0.97.216:9000</sonar.host.url>
+            <sonar.projectKey>Stateful-Tracker</sonar.projectKey>
+            <sonar.projectName>Stateful-Tracker</sonar.projectName>
     </properties>
 
     <dependencies>
