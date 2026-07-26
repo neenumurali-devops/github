@@ -144,7 +144,17 @@
 
         </plugins>
     </build>
+<distributionManagement>
+    <repository>
+        <id>github-maven</id>
+        <url>http://65.0.97.216:8081/repository/github-maven/</url>
+    </repository>
 
+    <snapshotRepository>
+        <id>github-maven</id>
+        <url>http://65.0.97.216:8081/repository/github-maven/</url>
+    </snapshotRepository>
+</distributionManagement>
     <profiles>
         <profile>
             <id>env-azure-1</id>
